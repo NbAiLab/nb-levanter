@@ -28,6 +28,6 @@ gcloud alpha compute tpus queued-resources stop $TPU_NAME --zone us-central2-b
 ```
 
 - Delete pod (only stop pods can be deleted)
-  ```bash
+```bash
 gcloud alpha compute tpus queued-resources delete $TPU_NAME --zone us-central2-b
 ```

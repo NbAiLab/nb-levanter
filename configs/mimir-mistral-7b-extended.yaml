@@ -1,0 +1,67 @@
+data:
+  train_urls:
+    - "gs://mimir-data-eu/mimir-extended/data/train-bad-{0001..0019}-of-0019.json.gz"
+    - "gs://mimir-data-eu/mimir-extended/data/train-medium-{0001..0075}-of-0075.json.gz"
+    - "gs://mimir-data-eu/mimir-extended/data/train-good-{0001..0029}-of-0029.json.gz"
+  validation_urls:
+    - "gs://mimir-data-eu/mimir-extended/data/validation-bad-{0001..0002}-of-0002.json.gz"
+    - "gs://mimir-data-eu/mimir-extended/data/validation-medium-{0001..0002}-of-0002.json.gz"
+    - "gs://mimir-data-eu/mimir-extended/data/validation-good-{0001..0002}-of-0002.json.gz"
+  cache_dir: "gs://mimir-train-us/levanter/tokenized/mimir-extended"
+  tokenizer: "mistralai/Mistral-7B-v0.1"
+model:
+  type: mistral
+  seq_len: 2048
+  hidden_dim: 4096
+  intermediate_dim: 14336
+  num_layers: 32
+  num_heads: 32
+  num_kv_heads: 8
+  activation_function: silu
+  initializer_range: 0.02
+  layer_norm_epsilon: 1.0e-05
+  upcast_attn: false
+  use_flash_attention: true
+  flash_attention_block_size: null
+  gradient_checkpointing: true
+  gradient_checkpointing_block_size: 5
+  scan_layers: true
+  use_bias: false
+  rope_scaling: null
+  sliding_window: 4096
+# TODO: uncomment this once we resolve the resource exhaustion issue
+initialize_from_hf: "mistralai/Mistral-7B-v0.1"
+use_hf_model_config: false
+trainer:
+  wandb:
+    entity: "nbailab"
+    project: "Mímir Levanter - mimir-mistral-7b-extended"
+    name: mimir-mistral-7b-extended
+    tags: ["mistral", "extended", "7B", "pre-existing"]
+
+  mp: p=f32,c=bfloat16
+  train_batch_size: 2048  # 2048*2048=4194304, maybe 2040 here and 30 per_device  # 256 set for v4-64 TPU
+  per_device_parallelism: 16  # anything smaller than 128 will trigger grad acc, but 128 won't fit in memory, so we decrease it
+  per_device_eval_parallelism: 16
+  num_train_steps: 64000
+  steps_per_eval: 1000
+  tensor_parallel_axes: ["mlp", "heads"]
+  fsdp_axis: "embed"
+  batch_axis: "batch"
+
+  checkpointer:
+    base_path: "gs://mimir-train-us/levanter/mimir-mistral-7b-extended/checkpoints"
+    save_interval: 1h
+    keep:
+      - every: 1000
+
+optimizer:
+  lr_schedule: cosine
+  learning_rate: 1.2e-5  # set low for fine-tuning
+  weight_decay: 0.1
+  warmup: 0.034  # ~2000 steps
+  min_lr_ratio: 0.1
+
+hf_save_steps: 10000
+hf_save_path: "gs://mimir-train-us/levanter/mimir-mistral-7b-extended/hf"
+hf_upload: "https://huggingface.co/NbAiLab/mimir-mistral-7b-extended"

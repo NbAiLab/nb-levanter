@@ -1,4 +1,5 @@
 #!/bin/bash
+# Modified from https://github.com/peregilk/ttconnect to take in user names
 
 # Set default zone if not provided
 zone=${3:-us-central2-b}

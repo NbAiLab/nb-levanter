@@ -58,6 +58,7 @@ retry sudo apt-get -qq update
 retry sudo apt-get -qq install -y python3.10-full python3.10-dev git
 
 # set up nfs
+retry sudo apt-get -qq install -y nfs-common
 NFS_SERVER=10.63.96.66
 MOUNT_POINT="/share"
 sudo mkdir -p ${MOUNT_POINT}

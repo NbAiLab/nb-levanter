@@ -31,3 +31,11 @@ gcloud alpha compute tpus queued-resources stop $TPU_NAME --zone us-central2-b
 ```bash
 gcloud alpha compute tpus queued-resources delete $TPU_NAME --zone us-central2-b
 ```
+
+## Setup
+
+If using the NFS volume:
+
+```bash
+curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm-nfs.sh" | bash
+```

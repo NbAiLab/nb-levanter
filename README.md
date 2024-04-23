@@ -34,8 +34,26 @@ gcloud alpha compute tpus queued-resources delete $TPU_NAME --zone us-central2-b
 
 ## Setup
 
-If using the NFS volume:
+Locally, download [ttconnect](./ttconnect.sh) to connect to the pod using the `ubuntu` user:
+```bash
+export TPU_NAME=levanter-pod-32
+./ttconnect $TPU_NAME ubuntu
+```
+
+Once in the pod, run the next script to install crate a venv, install dependencies, and mount the NFS volume:
 
 ```bash
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm-nfs.sh" | bash
+```
+
+Login into Weights and Biases, HuggingFace, and GitHub:
+```bash
+gh auth login
+wandb auth token
+hugginface-cli login
+```
+
+Then it's a matter of creating a config in `/share/nb-levanter/configs` and run it in all VMs:
+```bash
+WANDB_API_KEY=74f88d5fa2dadd405525fe4b5603ffccd339c35a HUGGING_FACE_HUB_TOKEN=$(cat ~/.cache/huggingface/token) levanter/infra/launch.sh python levanter/src/levanter/main/train_lm.py --config_path /share/nb-levanter/configs/mimir-mistral-7b-extended_resume.yaml
 ```

@@ -55,5 +55,5 @@ hugginface-cli login
 
 Then it's a matter of creating a config in `/share/nb-levanter/configs` and run it in all VMs:
 ```bash
-WANDB_API_KEY=74f88d5fa2dadd405525fe4b5603ffccd339c35a HUGGING_FACE_HUB_TOKEN=$(cat ~/.cache/huggingface/token) levanter/infra/launch.sh python levanter/src/levanter/main/train_lm.py --config_path /share/nb-levanter/configs/mimir-mistral-7b-extended_resume.yaml
+WANDB_API_KEY=<YOUR KEY HERE> HUGGING_FACE_HUB_TOKEN=$(cat ~/.cache/huggingface/token) levanter/infra/launch.sh python levanter/src/levanter/main/train_lm.py --config_path /share/nb-levanter/configs/mimir-mistral-7b-extended_resume.yaml
 ```

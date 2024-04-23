@@ -44,7 +44,7 @@ fi
 # install python 3.10, latest git
 sudo systemctl stop unattended-upgrades  # this frequently holds the apt lock
 sudo systemctl disable unattended-upgrades
-sudo apt remove -y unattended-upgrades
+#sudo apt remove -y unattended-upgrades
 # if it's still running somehow, kill it
 if [ $(ps aux | grep unattended-upgrade | wc -l) -gt 1 ]; then
   sudo kill -9 $(ps aux | grep unattended-upgrade | awk '{print $2}')

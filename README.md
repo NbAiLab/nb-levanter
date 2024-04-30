@@ -50,7 +50,7 @@ curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helper
 Login into Weights and Biases, HuggingFace, and GitHub:
 ```bash
 gh auth login
-wandb auth token
+wandb login
 hugginface-cli login
 ```
 

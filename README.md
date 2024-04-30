@@ -43,6 +43,7 @@ export TPU_NAME=levanter-pod-32
 Once in the pod, run the next script to install crate a venv, install dependencies, and mount the NFS volume (first line avoids dialog in interactive mode):
 
 ```bash
+sudo ulimit -n 65535
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm-nfs.sh" | bash
 ```

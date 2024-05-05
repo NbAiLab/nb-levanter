@@ -50,7 +50,7 @@ curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helper
 
 Or this other other one if NFS is not needed:
 
-```
+```bash
 sudo ulimit -n 65535
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm.sh" | bash

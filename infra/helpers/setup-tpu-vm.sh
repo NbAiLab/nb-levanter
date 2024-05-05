@@ -78,7 +78,7 @@ fi
 # install python 3.10, latest git
 sudo systemctl stop unattended-upgrades  # this frequently holds the apt lock
 sudo systemctl disable unattended-upgrades
-sudo apt remove -y unattended-upgrades
+# sudo apt remove -y unattended-upgrades
 # if it's still running somehow, kill it
 if [ $(ps aux | grep unattended-upgrade | wc -l) -gt 1 ]; then
   sudo kill -9 $(ps aux | grep unattended-upgrade | awk '{print $2}')
@@ -90,6 +90,15 @@ retry sudo add-apt-repository -y ppa:deadsnakes/ppa
 retry sudo add-apt-repository -y ppa:git-core/ppa
 retry sudo apt-get -qq update
 retry sudo apt-get -qq install -y python3.10-full python3.10-dev git
+
+# Install GitHub client CLI
+(type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
+&& sudo mkdir -p -m 755 /etc/apt/keyrings \
+&& wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+&& sudo apt update \
+&& sudo apt install gh -y
 
 VENV=~/venv310
 # if the venv doesn't exist, make it
@@ -123,3 +132,6 @@ git checkout $BRANCH
 # install levanter
 
 pip install -e .
+
+# default to loading the venv
+sudo bash -c "echo \"source ${VENV}/bin/activate\" > /etc/profile.d/activate_shared_venv.sh"

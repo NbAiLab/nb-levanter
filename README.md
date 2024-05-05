@@ -40,12 +40,20 @@ export TPU_NAME=levanter-pod-32
 ./ttconnect $TPU_NAME ubuntu
 ```
 
-Once in the pod, run the next script to install crate a venv, install dependencies, and mount the NFS volume (first line avoids dialog in interactive mode):
+Once in the pod, run the next script to create a venv, install dependencies, and mount the NFS volume (first line avoids dialog in interactive mode):
 
 ```bash
 sudo ulimit -n 65535
 sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm-nfs.sh" | bash
+```
+
+Or this other other one if NFS is not needed:
+
+```
+sudo ulimit -n 65535
+sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm.sh" | bash
 ```
 
 Login into Weights and Biases, HuggingFace, and GitHub:

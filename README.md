@@ -56,7 +56,7 @@ sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/nee
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm.sh" | bash
 ```
 
-Login into Weights and Biases, HuggingFace, and GitHub:
+Optionally, login into Weights and Biases, HuggingFace, and GitHub:
 ```bash
 gh auth login
 wandb login
@@ -67,7 +67,7 @@ hugginface-cli login
 
 Then it's a matter of creating a config in `/share/nb-levanter/configs` or a GCP bucket and run it in all VMs:
 ```bash
-WANDB_API_KEY=<YOUR KEY HERE> HUGGING_FACE_HUB_TOKEN=$(cat ~/.cache/huggingface/token) levanter/infra/launch.sh python levanter/src/levanter/main/train_lm.py --config_path /share/nb-levanter/configs/mimir-mistral-7b-extended.yaml
+WANDB_API_KEY=<YOUR KEY HERE> HF_TOKEN=$(cat ~/.cache/huggingface/token) levanter/infra/launch.sh python levanter/src/levanter/main/train_lm.py --config_path /share/nb-levanter/configs/mimir-mistral-7b-extended.yaml
 ```
 
 For resuming, you can create an extra config file os just invoke the same command but passing in a couple of extra parameters, `--trainer.wandb.resume true --trainer.id <WANDB_ID>`

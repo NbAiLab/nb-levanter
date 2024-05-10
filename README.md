@@ -63,7 +63,15 @@ wandb login
 hugginface-cli login
 ```
 
-Then it's a matter of creating a config in `/share/nb-levanter/configs` and run it in all VMs:
+## Training
+
+Then it's a matter of creating a config in `/share/nb-levanter/configs` or a GCP bucket and run it in all VMs:
 ```bash
-WANDB_API_KEY=<YOUR KEY HERE> HUGGING_FACE_HUB_TOKEN=$(cat ~/.cache/huggingface/token) levanter/infra/launch.sh python levanter/src/levanter/main/train_lm.py --config_path /share/nb-levanter/configs/mimir-mistral-7b-extended_resume.yaml
+WANDB_API_KEY=<YOUR KEY HERE> HUGGING_FACE_HUB_TOKEN=$(cat ~/.cache/huggingface/token) levanter/infra/launch.sh python levanter/src/levanter/main/train_lm.py --config_path /share/nb-levanter/configs/mimir-mistral-7b-extended.yaml
 ```
+
+For resuming, you can create an extra config file os just invoke the same command but passing in a couple of extra parameters, `--trainer.wandb.resume true --trainer.id <WANDB_ID>`
+
+## Troubleshooting
+
+1. If getting a `BarrierTimeoutException: DEADLINE_EXCEEDED: Barrier timed out` when writing checkpoints, try setting `TENSORSTORE_CURL_LOW_SPEED_TIME_SECONDS=60` `TENSORSTORE_CURL_LOW_SPEED_LIMIT_BYTES=256` to force retry.

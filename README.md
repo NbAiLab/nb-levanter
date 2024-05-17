@@ -75,3 +75,4 @@ For resuming, you can create an extra config file os just invoke the same comman
 ## Troubleshooting
 
 1. If getting a `BarrierTimeoutException: DEADLINE_EXCEEDED: Barrier timed out` when writing checkpoints, try setting `TENSORSTORE_CURL_LOW_SPEED_TIME_SECONDS=60` `TENSORSTORE_CURL_LOW_SPEED_LIMIT_BYTES=256` to force retry.
+2. When processing very long documents, Ray might get OOM or fail to start or finish tokenization/cahing of the dataset. In this case, it might help to reduce the number of CPUs so the global memory is not exhausted with `SLURM_CPUS_ON_NODE=16 TOKENIZERS_PARALLELISM=false`. 

@@ -31,6 +31,9 @@ EOF
 retCode=$?
 [[ $retCode -le 1 ]] || exit $retCode
 
+ulimit -n 65535
+sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+
 # set these env variables b/c it makes tensorstore behave better
 if ! grep -q TENSORSTORE_CURL_LOW_SPEED_TIME_SECONDS /etc/environment; then
   # need sudo
@@ -106,7 +109,7 @@ pip install -U wheel
 # jax and jaxlib
 # libtpu sometimes has issues installing for clinical (probably firewall?)
 #retry pip install -U "jax[tpu]==0.4.5" libtpu-nightly==0.1.dev20230216 -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
-retry pip install -U "jax[tpu]==0.4.21" -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
+retry pip install -U "jax[tpu]==0.4.26" -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
 
 # install levanter
 cd levanter

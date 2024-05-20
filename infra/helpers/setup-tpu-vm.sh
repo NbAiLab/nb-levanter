@@ -64,6 +64,8 @@ EOF
 retCode=$?
 [[ $retCode -le 1 ]] || exit $retCode
 
+ulimit -n 65535
+sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 
 # set these env variables b/c it makes tensorstore behave better
 if ! grep -q TENSORSTORE_CURL_LOW_SPEED_TIME_SECONDS /etc/environment; then

@@ -3,10 +3,10 @@ data:
     - "gs://mimir-data-eu/mimir-extended/data/train-bad-{0001..0019}-of-0019.json.gz"
     - "gs://mimir-data-eu/mimir-extended/data/train-medium-{0001..0075}-of-0075.json.gz"
     - "gs://mimir-data-eu/mimir-extended/data/train-good-{0001..0029}-of-0029.json.gz"
-  validation_urls:
-    - "gs://mimir-data-eu/mimir-extended/data/validation-bad-{0001..0002}-of-0002.json.gz"
-    - "gs://mimir-data-eu/mimir-extended/data/validation-medium-{0001..0002}-of-0002.json.gz"
-    - "gs://mimir-data-eu/mimir-extended/data/validation-good-{0001..0002}-of-0002.json.gz"
+  # validation_urls:
+  #   - "gs://mimir-data-eu/mimir-extended/data/validation-bad-{0001..0002}-of-0002.json.gz"
+  #   - "gs://mimir-data-eu/mimir-extended/data/validation-medium-{0001..0002}-of-0002.json.gz"
+  #   - "gs://mimir-data-eu/mimir-extended/data/validation-good-{0001..0002}-of-0002.json.gz"
   cache_dir: "gs://mimir-train-us/levanter/tokenized/mimir-extended"
   tokenizer: "mistralai/Mistral-7B-v0.1"
 model:
@@ -35,8 +35,8 @@ use_hf_model_config: false
 trainer:
   wandb:
     entity: "nbailab"
-    project: "Mímir Levanter - mimir-mistral-7b-extended"
-    name: mimir-mistral-7b-extended
+    project: "Mímir Levanter - mimir-mistral-7b-extended-test"
+    name: mimir-mistral-7b-extended-test
     tags: ["mistral", "extended", "7B", "pre-existing"]
 
   mp: p=f32,c=bfloat16
@@ -50,7 +50,7 @@ trainer:
   batch_axis: "batch"
 
   checkpointer:
-    base_path: "gs://mimir-train-us/levanter/mimir-mistral-7b-extended/checkpoints"
+    base_path: "gs://mimir-train-us/levanter/mimir-mistral-7b-extended-test/checkpoints"
     save_interval: 1h
     keep:
       - every: 1000
@@ -63,5 +63,5 @@ optimizer:
   min_lr_ratio: 0.1
 
 hf_save_steps: 10000
-hf_save_path: "gs://mimir-train-us/levanter/mimir-mistral-7b-extended/hf"
-hf_upload: "NbAiLab/mimir-mistral-7b-extended"
+hf_save_path: "gs://mimir-train-us/levanter/mimir-mistral-7b-extended-test/hf"
+hf_upload: "NbAiLab/mimir-mistral-7b-extended-test"

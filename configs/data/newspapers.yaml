@@ -1,0 +1,10 @@
+train_urls:
+  - "gs://mimir-data-eu/mimir-newspapers/data/train-bad-{0001..0004}-of-0004.json.gz"
+  - "gs://mimir-data-eu/mimir-newspapers/data/train-medium-{0001..0010}-of-0010.json.gz"
+  - "gs://mimir-data-eu/mimir-newspapers/data/train-good-{0001..0003}-of-0003.json.gz"
+validation_urls:
+  - "gs://mimir-data-eu/mimir-newspapers/data/validation-bad-0001-of-0001.json.gz"
+  - "gs://mimir-data-eu/mimir-newspapers/data/validation-medium-0001-of-0001.json.gz"
+  - "gs://mimir-data-eu/mimir-newspapers/data/validation-good-0001-of-0001.json.gz"
+cache_dir: "gs://mimir-train-us/levanter/tokenized/mimir-newspapers"
+tokenizer: "mimir-project/mimir-mistral-7b-base-scratch"

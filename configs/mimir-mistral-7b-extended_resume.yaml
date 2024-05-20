@@ -68,4 +68,4 @@ optimizer:
 
 hf_save_steps: 10000
 hf_save_path: "gs://mimir-train-us/levanter/mimir-mistral-7b-extended/hf"
-hf_upload: "https://huggingface.co/NbAiLab/mimir-mistral-7b-extended"
+hf_upload: "NbAiLab/mimir-mistral-7b-extended"

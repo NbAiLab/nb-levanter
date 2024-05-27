@@ -11,29 +11,30 @@ data:
   tokenizer: "mimir-project/mimir-mistral-7b-base-scratch"
 model:
   type: mistral
-  # num_layers: 32
-  # num_heads: 32
-  # hidden_dim: 4096
-  # intermediate_dim: 14336
-  # seq_len: 2048
-  # num_kv_heads: 8
-  # sliding_window: 4096
 
-  # activation_function: silu
-  # initializer_range: 0.02
-  # layer_norm_epsilon: 1.0e-05
+  num_layers: 32
+  num_heads: 32
+  hidden_dim: 4096
+  intermediate_dim: 14336
+  seq_len: 2048
+  num_kv_heads: 8
+  sliding_window: 2048
+
+  activation_function: silu
+  initializer_range: 0.02
+  layer_norm_epsilon: 1e-05
   
   # upcast_attn: false
-  # use_flash_attention: true
+  use_flash_attention: true
+  attn_backend: JAX_FLASH
   # flash_attention_block_size: null
   # gradient_checkpointing: true
   # gradient_checkpointing_block_size: 5
-  # scan_layers: true
+  scan_layers: true
   # use_bias: false
   # rope_scaling: null
-# TODO: uncomment this once we resolve the resource exhaustion issue
 initialize_from_hf: "mimir-project/mimir-mistral-7b-base-scratch"
-use_hf_model_config: true
+use_hf_model_config: false
 trainer:
   wandb:
     entity: "nbailab"
@@ -59,7 +60,7 @@ trainer:
 
 optimizer:
   lr_schedule: cosine
-  learning_rate: 3e-4  # set low for fine-tuning
+  learning_rate: 3e-5  # set low for fine-tuning
   beta1: 0.9
   beta2: 0.95
   epsilon: 1e-8

@@ -26,7 +26,7 @@ model:
   
   # upcast_attn: false
   use_flash_attention: true
-  attn_backend: JAX_FLASH
+  attn_backend: SPLASH
   # flash_attention_block_size: null
   # gradient_checkpointing: true
   # gradient_checkpointing_block_size: 5

@@ -1,0 +1,10 @@
+train_urls:
+  - "gs://mimir-data-eu/mimir-rightholders/data/train-bad-{0001..0008}-of-0008.json.gz"
+  - "gs://mimir-data-eu/mimir-rightholders/data/train-medium-{0001..0023}-of-0023.json.gz"
+  - "gs://mimir-data-eu/mimir-rightholders/data/train-good-{0001..0010}-of-0010.json.gz"
+validation_urls:
+  - "gs://mimir-data-eu/mimir-rightholders/data/validation-bad-0001-of-0001.json.gz"
+  - "gs://mimir-data-eu/mimir-rightholders/data/validation-medium-0001-of-0001.json.gz"
+  - "gs://mimir-data-eu/mimir-rightholders/data/validation-good-0001-of-0001.json.gz"
+cache_dir: "gs://mimir-train-us/levanter/tokenized/mimir-rightholders"
+tokenizer: "mimir-project/mimir-mistral-7b-base-scratch"

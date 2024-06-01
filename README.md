@@ -43,16 +43,12 @@ export TPU_NAME=levanter-pod-32
 Once in the pod, run the next script to create a venv, install dependencies, and mount the NFS volume (first line avoids dialog in interactive mode):
 
 ```bash
-sudo ulimit -n 65535
-sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm-nfs.sh" | bash
 ```
 
 Or this other other one if NFS is not needed:
 
 ```bash
-sudo ulimit -n 65535
-sudo sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm.sh" | bash
 ```
 
@@ -74,5 +70,6 @@ For resuming, you can create an extra config file os just invoke the same comman
 
 ## Troubleshooting
 
-1. If getting a `BarrierTimeoutException: DEADLINE_EXCEEDED: Barrier timed out` when writing checkpoints, try setting `TENSORSTORE_CURL_LOW_SPEED_TIME_SECONDS=60` `TENSORSTORE_CURL_LOW_SPEED_LIMIT_BYTES=256` to force retry.
+1. If getting a `BarrierTimeoutException: DEADLINE_EXCEEDED: Barrier timed out` when writing checkpoints, try setting `TENSORSTORE_CURL_LOW_SPEED_TIME_SECONDS=360 TENSORSTORE_CURL_LOW_SPEED_LIMIT_BYTES=256` to force retry.
 2. When processing very long documents, Ray might get OOM or fail to start or finish tokenization/cahing of the dataset. In this case, it might help to reduce the number of CPUs so the global memory is not exhausted with `SLURM_CPUS_ON_NODE=16 TOKENIZERS_PARALLELISM=false`. 
+3. Some options for optimization (untested): `LIBTPU_INIT_ARGS='--xla_jf_spmd_threshold_for_windowed_einsum_mib=0 --xla_tpu_spmd_threshold_for_allgather_cse=10000 --xla_enable_async_all_gather=true --xla_tpu_enable_latency_hiding_scheduler=true TPU_MEGACORE=MEGACORE_DENSE'`

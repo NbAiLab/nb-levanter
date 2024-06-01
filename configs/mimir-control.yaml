@@ -11,7 +11,6 @@ model:
   intermediate_dim: 5504
   seq_len: 2048
   num_kv_heads: 32
-  sliding_window: 2048
 
   activation_function: silu
   initializer_range: 0.02
@@ -19,7 +18,7 @@ model:
 
   # upcast_attn: false
   use_flash_attention: true
-  attn_backend: SPLASH
+  attn_backend: JAX_FLASH
   # flash_attention_block_size: null
   # gradient_checkpointing: true
   # gradient_checkpointing_block_size: 5
@@ -36,8 +35,8 @@ trainer:
 
   mp: p=f32,c=bfloat16
   train_batch_size: 2048  # Set to 2048 and parallelism 16, grad acc adjusted so 2048*2048=4194304, maybe 2040 here and 30 per_device  # 256 set for v4-64 TPU
-  per_device_parallelism: -1  # anything smaller than 128 will trigger grad acc, but 128 won't fit in memory, so we decrease it
-  per_device_eval_parallelism: -1
+  per_device_parallelism: 32  # anything smaller than 128 will trigger grad acc, but 128 won't fit in memory, so we decrease it
+  per_device_eval_parallelism: 32
   num_train_steps: 30000  # Training for (2 epochs * 65748775870 tokens / (2048 seq length * 2048 batch size)) = 31351 steps
   steps_per_eval: 10000
   tensor_parallel_axes: ["mlp", "heads"]

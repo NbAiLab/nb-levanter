@@ -33,7 +33,6 @@ model:
   scan_layers: true
   # use_bias: false
   # rope_scaling: null
-initialize_from_hf: "mimir-project/mimir-mistral-7b-base-scratch"
 use_hf_model_config: false
 trainer:
   wandb:

@@ -27,7 +27,7 @@ model:
   # upcast_attn: false
   use_flash_attention: true
   attn_backend: JAX_FLASH
-  # flash_attention_block_size: null
+  flash_attention_block_size: 1024
   # gradient_checkpointing: true
   # gradient_checkpointing_block_size: 5
   scan_layers: true
@@ -43,8 +43,8 @@ trainer:
 
   mp: p=f32,c=bfloat16
   train_batch_size: 2048  # Set to 2048 and parallelism 16, grad acc adjusted so 2048*2048=4194304, maybe 2040 here and 30 per_device  # 256 set for v4-64 TPU
-  per_device_parallelism: 16  # anything smaller than 128 will trigger grad acc, but 128 won't fit in memory, so we decrease it
-  per_device_eval_parallelism: 16
+  per_device_parallelism: 32  # anything smaller than 128 will trigger grad acc, but 128 won't fit in memory, so we decrease it
+  per_device_eval_parallelism: 32
   num_train_steps: 64000
   steps_per_eval: 1000
   tensor_parallel_axes: ["mlp", "heads"]

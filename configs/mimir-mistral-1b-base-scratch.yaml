@@ -38,8 +38,8 @@ use_hf_model_config: false
 trainer:
   wandb:
     entity: "nbailab"
-    project: "Mímir Levanter - mimir-mistral-1b-base"
-    name: mimir-mistral-1b-base
+    project: "Mímir Levanter - mimir-mistral-1b-base-scratch"
+    name: mimir-mistral-1b-base-scratch
     tags: ["mistral", "base", "1B", "scracth"]
 
   mp: p=f32,c=bfloat16
@@ -53,7 +53,7 @@ trainer:
   batch_axis: "batch"
 
   checkpointer:
-    base_path: "gs://mimir-train-us/levanter/mimir-mistral-1b-base/checkpoints"
+    base_path: "gs://mimir-train-us/levanter/mimir-mistral-1b-base-scratch/checkpoints"
     save_interval: 1h
     keep:
       - every: 1000
@@ -69,5 +69,5 @@ optimizer:
   min_lr_ratio: 0.1  # end lr 7.45E-05
 
 hf_save_steps: 1000
-hf_save_path: "gs://mimir-train-us/levanter/mimir-mistral-1b-base/hf"
-hf_upload: NbAiLab/mimir-mistral-1b-base
+hf_save_path: "gs://mimir-train-us/levanter/mimir-mistral-1b-base-scratch/hf"
+hf_upload: NbAiLab/mimir-mistral-1b-base-scratch

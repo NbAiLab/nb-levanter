@@ -57,7 +57,7 @@ Optionally, mount an NFS volume:
 sudo apt-get -qq install -y nfs-common
 export NFS_SERVER=10.63.96.66
 export MOUNT_POINT="/share"
-export sudo mkdir -p ${MOUNT_POINT}
+sudo mkdir -p ${MOUNT_POINT}
 export CURRENT_NFS_ENTRY=$(grep ${NFS_SERVER} /etc/fstab)
 export DESIRED_NFS_ENTRY="${NFS_SERVER}:/share ${MOUNT_POINT} nfs defaults 0 0"
 grep -v "${NFS_SERVER}" /etc/fstab > /tmp/fstab.new

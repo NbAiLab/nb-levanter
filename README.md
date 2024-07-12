@@ -52,6 +52,21 @@ Or this other other one if NFS is not needed:
 curl -s "https://raw.githubusercontent.com/NbAiLab/nb-levanter/main/infra/helpers/setup-tpu-vm.sh" | bash
 ```
 
+Optionally, mount an NFS volume:
+```bash
+sudo apt-get -qq install -y nfs-common
+export NFS_SERVER=10.63.96.66
+export MOUNT_POINT="/share"
+export sudo mkdir -p ${MOUNT_POINT}
+export CURRENT_NFS_ENTRY=$(grep ${NFS_SERVER} /etc/fstab)
+export DESIRED_NFS_ENTRY="${NFS_SERVER}:/share ${MOUNT_POINT} nfs defaults 0 0"
+grep -v "${NFS_SERVER}" /etc/fstab > /tmp/fstab.new
+echo "${DESIRED_NFS_ENTRY}" >> /tmp/fstab.new
+sudo cp /etc/fstab /etc/fstab.orig
+sudo mv /tmp/fstab.new /etc/fstab
+sudo mount -a
+```
+
 Optionally, login into Weights and Biases, HuggingFace, and GitHub:
 ```bash
 gh auth login

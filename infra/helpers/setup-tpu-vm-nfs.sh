@@ -90,6 +90,7 @@ sudo mount -a
 for x in `ls -d /share/lev*`; do
   git config --global --add safe.directory $x
 done
+git config --global credential.helper store
 
 # symlink lev* to home
 ln -s /share/lev* ~

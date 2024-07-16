@@ -101,6 +101,7 @@ retry sudo apt-get -qq install -y python3.10-full python3.10-dev git
 && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
 && sudo apt update \
 && sudo apt install gh -y
+git config --global credential.helper store
 
 VENV=~/venv310
 # if the venv doesn't exist, make it

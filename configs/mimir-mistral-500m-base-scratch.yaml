@@ -59,7 +59,7 @@ trainer:
 
 optimizer:
   lr_schedule: cosine
-  learning_rate: 7.45E-04  # params is 1174538240, so for 7B was 3e-4, hence 3e-4/sqrt(7241732096/1174538240) ~ 7.45E-04
+  learning_rate: 8.1E-05  # params is 526920800, so for 7B was 3e-4, hence 3e-4/sqrt(7241732096/526920800) ~ 8.1E-05
   beta1: 0.9
   beta2: 0.95
   epsilon: 1e-8

@@ -12,12 +12,12 @@ data:
 model:
   type: mistral
 
-  num_layers: 32
-  num_heads: 32
-  hidden_dim: 1120
-  intermediate_dim: 3284
+  num_layers: 24
+  num_heads: 24
+  hidden_dim: 1080
+  intermediate_dim: 1442
   seq_len: 2048
-  num_kv_heads: 8
+  num_kv_heads: 6
   sliding_window: 2048
 
   activation_function: silu

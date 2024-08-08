@@ -37,7 +37,7 @@ use_hf_model_config: false
 trainer:
   wandb:
     entity: "nbailab"
-    project: "Mímir Levanter - mimir-mistral-2500m-base-scratch"
+    project: "Mímir Levanter - mimir-mistral-250m-base-scratch"
     name: mimir-mistral-250m-base-scratch
     tags: ["mistral", "base", "250m", "scracth"]
 

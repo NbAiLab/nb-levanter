@@ -1,0 +1,73 @@
+data:
+  train_urls:
+    - "gs://mimir-data-eu/mimir-base/data/train-bad-{0001..0006}-of-0006.json.gz"
+    - "gs://mimir-data-eu/mimir-base/data/train-medium-{0001..0021}-of-0021.json.gz"
+    - "gs://mimir-data-eu/mimir-base/data/train-good-{0001..0007}-of-0007.json.gz"
+  validation_urls:
+    - "gs://mimir-data-eu/mimir-base/data/validation-bad-0001-of-0001.json.gz"
+    - "gs://mimir-data-eu/mimir-base/data/validation-medium-0001-of-0001.json.gz"
+    - "gs://mimir-data-eu/mimir-base/data/validation-good-0001-of-0001.json.gz"
+  cache_dir: "gs://mimir-train-us/levanter/tokenized/mimir-base"
+  tokenizer: "mimir-project/mimir-mistral-7b-base-scratch"
+model:
+  type: mistral
+
+  num_layers: 32
+  num_heads: 32
+  hidden_dim: 1024
+  intermediate_dim: 1536
+  seq_len: 2048
+  num_kv_heads: 8
+  sliding_window: 2048
+  # head_size = hidden_dim / num_kv_heads, ideally 64; or 128 for TPUs
+
+  activation_function: silu
+  initializer_range: 0.02
+  layer_norm_epsilon: 1e-05
+  
+  # upcast_attn: false
+  use_flash_attention: true
+  attn_backend: JAX_FLASH
+  flash_attention_block_size: 1024
+  # gradient_checkpointing: true
+  # gradient_checkpointing_block_size: 5
+  scan_layers: true
+  # use_bias: false
+  # rope_scaling: null
+use_hf_model_config: false
+trainer:
+  wandb:
+    entity: "nbailab"
+    project: "Mímir Levanter - mimir-mistral-250m-base-scratch"
+    name: mimir-mistral-250m-base-scratch
+    tags: ["mistral", "base", "250m", "scracth"]
+
+  mp: p=f32,c=bfloat16
+  train_batch_size: 2048  # Set to 2048 and parallelism 16, grad acc adjusted so 2048*2048=4194304, maybe 2040 here and 30 per_device  # 256 set for v4-64 TPU
+  per_device_parallelism: 128  # anything smaller than 128 will trigger grad acc, but 128 won't fit in memory, so we decrease it
+  per_device_eval_parallelism: 128
+  num_train_steps: 64000
+  steps_per_eval: 1000
+  tensor_parallel_axes: ["mlp", "heads"]
+  fsdp_axis: "embed"
+  batch_axis: "batch"
+
+  checkpointer:
+    base_path: "gs://mimir-train-us/levanter/mimir-mistral-250m-base-scratch/checkpoints"
+    save_interval: 1h
+    keep:
+      - every: 1000
+
+optimizer:
+  lr_schedule: cosine
+  learning_rate: 5.6E-05  # params is 255341632, so for 7B was 3e-4, hence 3e-4/sqrt(7241732096/255341632) ~ 5.6E-05
+  beta1: 0.9
+  beta2: 0.95
+  epsilon: 1e-8
+  weight_decay: 0.1
+  warmup: 0.034  # ~2000 steps
+  min_lr_ratio: 0.1  # end lr 5.6E-06
+
+hf_save_steps: 1000
+hf_save_path: "gs://mimir-train-us/levanter/mimir-mistral-250m-base-scratch/hf"
+hf_upload: NbAiLab/mimir-mistral-250m-base-scratch

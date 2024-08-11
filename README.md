@@ -88,3 +88,4 @@ For resuming, you can create an extra config file os just invoke the same comman
 1. If getting a `BarrierTimeoutException: DEADLINE_EXCEEDED: Barrier timed out` when writing checkpoints, try setting `TENSORSTORE_CURL_LOW_SPEED_TIME_SECONDS=360 TENSORSTORE_CURL_LOW_SPEED_LIMIT_BYTES=256` to force retry.
 2. When processing very long documents, Ray might get OOM or fail to start or finish tokenization/cahing of the dataset. In this case, it might help to reduce the number of CPUs so the global memory is not exhausted with `SLURM_CPUS_ON_NODE=16 TOKENIZERS_PARALLELISM=false`. 
 3. Some options for optimization (untested): `LIBTPU_INIT_ARGS='--xla_jf_spmd_threshold_for_windowed_einsum_mib=0 --xla_tpu_spmd_threshold_for_allgather_cse=10000 --xla_enable_async_all_gather=true --xla_tpu_enable_latency_hiding_scheduler=true TPU_MEGACORE=MEGACORE_DENSE'`
+4. Add `--trainer.fsdp_axis=null` for smaller models (below 1B).

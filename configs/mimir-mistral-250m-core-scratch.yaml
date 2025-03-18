@@ -7,7 +7,7 @@ data:
     - "gs://mimir-data-eu/mimir-core/data/validation-bad-0001-of-0001.json.gz"
     - "gs://mimir-data-eu/mimir-core/data/validation-medium-0001-of-0001.json.gz"
     - "gs://mimir-data-eu/mimir-core/data/validation-good-0001-of-0001.json.gz"
-  cache_dir: "gs://mimir-train-us/levanter/tokenized/mimir-base"
+  cache_dir: "gs://mimir-train-us/levanter/tokenized/mimir-tokenizer-core"
   tokenizer: "mimir-project/mimir-mistral-7b-base-scratch"
 model:
   type: mistral

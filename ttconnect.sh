@@ -5,6 +5,8 @@
 zone=${3:-us-central2-b}
 name=$1
 user=${2:-$USER}
+checks=${5:-true}
+
 
 # Check if the name argument is provided
 if [ -z "$name" ]; then
@@ -15,20 +17,26 @@ fi
 echo "Connecting to $name in zone $zone";
 
 # Some basic checks if the input is valid
-output=$(gcloud compute tpus describe $name --zone $zone 2>/dev/null)
-if [ $? -ne 0 ]; then
-    echo "Could not find a tpu-v4 with the name $name in the zone $zone. Exiting."
-    exit 1
+output=$(gcloud compute tpus describe $name --zone $zone --format="value(acceleratorType)" 2>/dev/null)
+if [ "$checks" = "true" ]; then
+  if [ $? -ne 0 ]; then
+      echo "Could not find an tpu with the name $name in the zone $zone. Exiting."
+      exit 1
+  fi
 fi
 
 # Extracting TPU type and size without quotes
-tputype=$(echo $output | awk '{print $2}')
-tpusize=$(echo $tputype | cut -c4-)
+tputype=$output
+tpusize=$(echo "$tputype" | sed -E 's/.*-([0-9]+)$/\1/')
+#tpusize=$(echo $tputype | cut -c4-)
 size=$(($tpusize / 8))
+echo "tputype: $tputype, tpusize: $tpusize, size: $size"
 
-if (( size < 1 )); then
+if [ "$checks" = "true" ]; then
+  if (( size < 1 )); then
     echo "This is reported as a $tputype with $size tpu(s). This is not a valid tpu-v4 resource. Exiting."
     exit 1
+  fi
 fi
 
 # Check if the tmux session exists, if not create it

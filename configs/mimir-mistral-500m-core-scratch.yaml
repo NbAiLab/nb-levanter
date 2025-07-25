@@ -14,8 +14,8 @@ model:
 
   num_layers: 32
   num_heads: 32
-  hidden_dim: 1120
-  intermediate_dim: 3284
+  hidden_dim: 1024
+  intermediate_dim: 4096
   seq_len: 2048
   num_kv_heads: 8
   sliding_window: 2048

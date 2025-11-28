@@ -26,10 +26,8 @@ model:
   use_flash_attention: true
   flash_attention_block_size: null
   gradient_checkpointing: true
-  gradient_checkpointing_block_size: 5
   scan_layers: true
   use_bias: true
-  rope_scaling: null
   sliding_window: 4096
 
 initialize_from_hf: "google/gemma-3-4b-pt"

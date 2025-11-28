@@ -1,0 +1,83 @@
+data:
+  # Replace these GCS patterns with your actual Gemma 3 4B tokenized dataset locations.
+  train_urls:
+    - "https://huggingface.co/datasets/NbAiLab/aurora-open-2511/resolve/main/train/{00000..00127}_data.parquet"
+  validation_urls:
+    - "https://huggingface.co/datasets/NbAiLab/aurora-open-2511/resolve/main/validation/{00000..00127}_data.parquet"
+  cache_dir: "gs://nb-gpt-train-us/levanter/tokenized/aurora-open-2511"
+  # Set this to the Hugging Face tokenizer/model id you plan to use for Gemma 3 4B.
+  tokenizer: "google/gemma-3-4b-pt"
+
+model:
+  # type used by your training code to select model implementation
+  type: gemma3
+  # Typical context length
+  seq_len: 4096
+  # Model size parameters tuned for ~4B-class model; adjust to match exact HF/config expectations
+  #hidden_dim: 3072
+  #intermediate_dim: 12288
+  #num_layers: 28
+  #num_heads: 24
+  #num_kv_heads: 8
+  #activation_function: silu
+  initializer_range: 0.02
+  layer_norm_epsilon: 1.0e-05
+  upcast_attn: false
+  use_flash_attention: true
+  flash_attention_block_size: null
+  gradient_checkpointing: true
+  gradient_checkpointing_block_size: 5
+  scan_layers: true
+  use_bias: true
+  rope_scaling: null
+  sliding_window: 4096
+
+initialize_from_hf: "google/gemma-3-4b-pt"
+use_hf_model_config: true
+
+trainer:
+  wandb:
+    entity: "nbailab"
+    project: "nb-gpt-pretrain"
+    name: nb-gpt-gemma3-4b-base-aurora-open-2511-pretrain
+    tags: ["gemma", "4B", "base", "aurora-open-2511", "pretrain"]
+
+  # mixed precision config: param precision, compute precision
+  mp: p=f32,c=bfloat16
+
+  train_batch_size: 1024
+
+  per_device_parallelism: 64
+  per_device_eval_parallelism: 64
+
+  num_train_steps: 75000  # ~3 epochs (100B tokens data / 4M tokens bs)
+  steps_per_eval: 1000
+
+  tensor_parallel_axes: ["mlp", "heads"]
+  fsdp_axis: "embed"
+  batch_axis: "batch"
+
+  checkpointer:
+    base_path: "gs://nb-gpt-train-us/levanter/models/nb-gpt-gemma3-4b-base-aurora-open-2511-pretrain/checkpoints"
+    save_interval: 1h
+    keep:
+      - every: 1000
+
+optimizer:
+  lr_schedule: linear  # cosine
+  # ~3,879,925,248 params text trnasformer + ~416,866,032 params vision encoder ≈ 4,296,791,280
+  # lr 3e-4 for 7B Mistral -> 3e-4 / sqrt(7241732096/4296791280) ~ 2.3e-4
+  learning_rate: 1.2e-5  # keep lr low for fine-tuning; increase for full training from scratch.
+  weight_decay: 0.1
+  decay: 0.01
+  warmup: 0.002  # 1500 steps
+  min_lr_ratio: 0.1
+  cycles:
+  - 1500
+  - 73500
+
+# HF upload / saving
+hf_save_steps: 10000
+hf_save_path: "gs://nb-gpt-train-us/levanter/models/nb-gpt-gemma3-4b-base-aurora-open-2511-pretrain/hf"
+# Set to the HF repo you will push to (or leave empty and handle upload separately)
+hf_upload: "NbAiLab/nb-gpt-gemma3-4b-base-aurora-open-2511-pretrain"
